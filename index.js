@@ -12,13 +12,12 @@ function Airplane(name) {
   this.name = name;
   this.isFlying = false;
 }
-Airplane.prototype.takeOff = function () {
+Airplane.prototype.takeOff = function() {
   this.isFlying = true;
 };
-Airplane.prototype.land = function () {
+Airplane.prototype.land = function() {
   this.isFlying = false;
 };
-
 
 /*
 // 👇 COMPLETE YOUR WORK BELOW 👇
@@ -44,25 +43,21 @@ function Person(name, age) {
   this.age = age;
   this.stomach = [];
 }
-Person.prototype.eat = function (food) {
-  for(let i = 0; i < 10; i++) {
+Person.prototype.eat = function(food) {
+  if (this.stomach.length < 10) {
     this.stomach.push(food);
   }
+  // console.log(this.stomach);
 };
-Person.prototype.poop = function () {
-  this.stomach = new [];
+Person.prototype.poop = function() {
+  const size = this.stomach.length;
+  this.stomach.splice(0, size);
 };
-Person.prototype.toString = function () {
-  
+Person.prototype.toString = function() {
+  return `${this.name} ${this.age}`;
 };
-
-const newPerson = new Person({
-  name: 'Tuna',
-  age: 22
-});
 
 // console.log(newPerson.stomach);
-
 
 /*
   TASK 2
@@ -78,9 +73,29 @@ const newPerson = new Person({
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.tank = 0;
+  this.odometer = 0;
+  this.milesPerGallon = milesPerGallon;
 }
+
+Car.prototype.fill = function(gallons) {
+  return (this.tank = this.tank + gallons);
+};
+
+Car.prototype.drive = function(distance) {
+  const fuel = this.tank * this.milesPerGallon;
+  if (fuel < distance) {
+    this.tank = 0;
+    this.odometer += fuel;
+    return `I ran out of fuel at ${this.odometer} miles!`;
+  }
+
+  const gallons = distance / this.milesPerGallon;
+  this.odometer += distance;
+  this.tank -= gallons;
+};
 
 /*
   TASK 3
@@ -89,10 +104,20 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
+// function Baby(name, age, favoriteToy) {
+//   Person.call(this, name, age); // binding this to Person
+//   this.favoriteToy = favoriteToy;
+// }
 
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
 }
 
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}`;
+};
 /* 
   TASK 4
 
@@ -103,14 +128,21 @@ function Baby() {
   4. 
 */
 
-
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
-if (typeof exports !== 'undefined') {
-  module.exports = module.exports || {}
-  if (Airplane) { module.exports.Airplane = Airplane }
-  if (Person) { module.exports.Person = Person }
-  if (Car) { module.exports.Car = Car }
-  if (Baby) { module.exports.Baby = Baby }
+if (typeof exports !== "undefined") {
+  module.exports = module.exports || {};
+  if (Airplane) {
+    module.exports.Airplane = Airplane;
+  }
+  if (Person) {
+    module.exports.Person = Person;
+  }
+  if (Car) {
+    module.exports.Car = Car;
+  }
+  if (Baby) {
+    module.exports.Baby = Baby;
+  }
 }
